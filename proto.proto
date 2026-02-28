@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package ServiceData;
+
+service ServiceData{
+    rpc serviceStatus (EmptyRequest) returns (StatusServer);
+}
+
+message EmptyRequest {}
+
+message StatusServer {
+    bool act = 1;
+    string message = 2;
+}
