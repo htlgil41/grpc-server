@@ -19,7 +19,13 @@ interface ServicesGrpc {
     usuarioByEmail: grpc.MethodDefinition<RequestUsuarioByEmail, UsuarioResponse>;
 }
 
-const protoLoad = protoloader.loadSync(PROTO_PATH);
+const protoLoad = protoloader.loadSync(
+    PROTO_PATH,
+    {
+        keepCase: true,
+        longs: Number,
+    }
+);
 const services = grpc.loadPackageDefinition(protoLoad) as {
     ServiceData: {
         ServiceData: grpc.ServiceClientConstructor & { services: ServicesGrpc }
