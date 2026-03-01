@@ -3,11 +3,13 @@ export interface ServerStatusResponse {
     message: string;
 }
 
+export interface UsuarioListResponse {
+    usuarios: UsuarioResponse[];
+}
+
 export interface UsuarioResponse {
-    usuarios: {
-        nombre: string;
-        apellido: string;
-        direccion: string;
-        email: string;
-    }[];
+    nombre: string;
+    apellido: string;
+    direccion: string;
+    email: string;
 }

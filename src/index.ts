@@ -1,5 +1,5 @@
-import type { RequestVoid } from './types/requests.ts';
-import type { ServerStatusResponse, UsuarioResponse } from './types/responses.ts';
+import type { RequestUsuarioByEmail, RequestVoid } from './types/requests.ts';
+import type { ServerStatusResponse, UsuarioListResponse, UsuarioResponse } from './types/responses.ts';
 
 import 'dotenv/config';
 import path, { dirname } from 'path';
@@ -9,12 +9,14 @@ import * as protoloader from  '@grpc/proto-loader';
 import { LoadEnvOrThrow } from './helpers/loadenv.ts';
 import { serviceStatus } from './funcs/serviceStatus.ts';
 import { usuariolist } from './funcs/usuariolist.ts';
+import { usuarioByEmail } from './funcs/usuarioByEmail.ts';
 
 const PATH = dirname(fileURLToPath(import.meta.url));
 const PROTO_PATH = path.resolve(PATH, '../proto.proto');
 interface ServicesGrpc {
     serviceStatus: grpc.MethodDefinition<RequestVoid, ServerStatusResponse>;
-    usuariolist: grpc.MethodDefinition<RequestVoid, UsuarioResponse>;
+    usuariolist: grpc.MethodDefinition<RequestVoid, UsuarioListResponse>;
+    usuarioByEmail: grpc.MethodDefinition<RequestUsuarioByEmail, UsuarioResponse>;
 }
 
 const protoLoad = protoloader.loadSync(PROTO_PATH);
@@ -41,7 +43,8 @@ function main () {
     });
     server.addService(services.ServiceData.ServiceData.service, {
         serviceStatus,
-        usuariolist
+        usuariolist,
+        usuarioByEmail
     });
     server.bindAsync(`0.0.0.0:${LoadEnvOrThrow('PORT_GRPC')}`, grpc.ServerCredentials.createInsecure(), () =>{
 

@@ -5,16 +5,21 @@ package ServiceData;
 service ServiceData{
     rpc serviceStatus (EmptyRequest) returns (StatusServer);
     rpc usuariolist (EmptyRequest) returns (UsuariosList);
+    rpc usuarioByEmail (UsuarioByEmailRequest) returns (Usuario);
 }
 
 message EmptyRequest {}
+
+message UsuarioByEmailRequest {
+    string email = 1;
+}
 
 message StatusServer {
     bool act = 1;
     string message = 2;
 }
 
-message Usuarios {
+message Usuario {
     string nombre = 1;
     string apellido = 2;
     string direccion = 3;
@@ -22,5 +27,5 @@ message Usuarios {
 }
 
 message UsuariosList {
-    repeated Usuarios usuarios = 1;
+    repeated Usuario usuarios = 1;
 }
