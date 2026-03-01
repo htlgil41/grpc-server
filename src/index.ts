@@ -1,5 +1,5 @@
 import type { RequestVoid } from './types/requests.ts';
-import type { ServerStatusResponse } from './types/responses.ts';
+import type { ServerStatusResponse, UsuarioResponse } from './types/responses.ts';
 
 import 'dotenv/config';
 import path, { dirname } from 'path';
@@ -8,11 +8,13 @@ import * as grpc from '@grpc/grpc-js';
 import * as protoloader from  '@grpc/proto-loader';
 import { LoadEnvOrThrow } from './helpers/loadenv.ts';
 import { serviceStatus } from './funcs/serviceStatus.ts';
+import { usuariolist } from './funcs/usuariolist.ts';
 
 const PATH = dirname(fileURLToPath(import.meta.url));
 const PROTO_PATH = path.resolve(PATH, '../proto.proto');
 interface ServicesGrpc {
-    serviceStatus: grpc.MethodDefinition<RequestVoid, ServerStatusResponse>
+    serviceStatus: grpc.MethodDefinition<RequestVoid, ServerStatusResponse>;
+    usuariolist: grpc.MethodDefinition<RequestVoid, UsuarioResponse>;
 }
 
 const protoLoad = protoloader.loadSync(PROTO_PATH);
@@ -37,7 +39,10 @@ function main () {
         "grpc.http2.min_time_between_pings_ms": 15000,
         "grpc.keepalive_permit_without_calls": 1,
     });
-    server.addService(services.ServiceData.ServiceData.service, {serviceStatus});
+    server.addService(services.ServiceData.ServiceData.service, {
+        serviceStatus,
+        usuariolist
+    });
     server.bindAsync(`0.0.0.0:${LoadEnvOrThrow('PORT_GRPC')}`, grpc.ServerCredentials.createInsecure(), () =>{
 
         console.log(`GRPC Server Run:${LoadEnvOrThrow('PORT_GRPC')}`);

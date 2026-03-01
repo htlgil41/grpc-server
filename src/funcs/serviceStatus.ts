@@ -1,5 +1,4 @@
 import * as grpc from '@grpc/grpc-js';
-import * as protoloader from  '@grpc/proto-loader';
 import type { RequestVoid } from '../types/requests.ts';
 import type { ServerStatusResponse } from '../types/responses.ts';
 

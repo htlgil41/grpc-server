@@ -4,6 +4,7 @@ package ServiceData;
 
 service ServiceData{
     rpc serviceStatus (EmptyRequest) returns (StatusServer);
+    rpc usuariolist (EmptyRequest) returns (UsuariosList);
 }
 
 message EmptyRequest {}
@@ -11,4 +12,15 @@ message EmptyRequest {}
 message StatusServer {
     bool act = 1;
     string message = 2;
+}
+
+message Usuarios {
+    string nombre = 1;
+    string apellido = 2;
+    string direccion = 3;
+    string email = 4;
+}
+
+message UsuariosList {
+    repeated Usuarios usuarios = 1;
 }
