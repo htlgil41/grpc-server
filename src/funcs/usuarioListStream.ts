@@ -8,14 +8,12 @@ export const usuarioListStream = async (
 ) => {
 
     for (let usuario of UsuairoListaData){
-
+        if (call.cancelled) break;
         await new Promise<boolean>((resolve, reject) => {
-
             setTimeout(() => {
                 resolve(true);   
             }, 2000);
         });
-
         call.write(usuario);
     }
     call.end();
