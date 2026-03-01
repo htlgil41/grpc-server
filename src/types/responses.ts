@@ -1,1 +1,4 @@
-export interface ServerStatusResponse {}
+export interface ServerStatusResponse {
+    act: boolean;
+    message: string;
+}
