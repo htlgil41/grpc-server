@@ -11,6 +11,7 @@ import { serviceStatus } from './funcs/serviceStatus.ts';
 import { usuariolist } from './funcs/usuariolist.ts';
 import { usuarioByEmail } from './funcs/usuarioByEmail.ts';
 import { usuarioListStream } from './funcs/usuarioListStream.ts';
+import { usuarioStream } from './funcs/usuarioStream.ts';
 
 const PATH = dirname(fileURLToPath(import.meta.url));
 const PROTO_PATH = path.resolve(PATH, '../proto.proto');
@@ -19,6 +20,7 @@ interface ServicesGrpc {
     usuariolist: grpc.MethodDefinition<RequestVoid, UsuarioListResponse>;
     usuarioByEmail: grpc.MethodDefinition<RequestUsuarioByEmail, UsuarioResponse>;
     usuarioListStream: grpc.MethodDefinition<RequestVoid, UsuarioResponse>
+    usuarioStream: grpc.MethodDefinition<RequestUsuarioByEmail, UsuarioResponse>;
 }
 
 const protoLoad = protoloader.loadSync(
@@ -53,7 +55,8 @@ function main () {
         serviceStatus,
         usuariolist,
         usuarioByEmail,
-        usuarioListStream
+        usuarioListStream,
+        usuarioStream
     });
     server.bindAsync(`0.0.0.0:${LoadEnvOrThrow('PORT_GRPC')}`, grpc.ServerCredentials.createInsecure(), () =>{
 

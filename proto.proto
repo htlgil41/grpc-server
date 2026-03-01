@@ -8,6 +8,7 @@ service ServiceData{
     rpc usuarioByEmail (UsuarioByEmailRequest) returns (Usuario);
 
     rpc usuarioListStream (EmptyRequest) returns (stream Usuario);
+    rpc usuarioStream (stream UsuarioByEmailRequest) returns (stream Usuario);
 }
 
 message EmptyRequest {}
