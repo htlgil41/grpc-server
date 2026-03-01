@@ -21,6 +21,8 @@ bun run start:dev
 ![caps](/caps/serverstatus.png)
 ![caps](/caps/usuariolist.png)
 ![caps](/caps/usuariobyemail.png)
+![caps](/caps/usuarioListStream.png)
+![caps](/caps/usuarioDuplex.png)
 
 **Nota:** En la ultima captura se usa el parametro que se puede ver en todas las imagenes como
 Parametro/Message
