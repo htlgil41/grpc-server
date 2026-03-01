@@ -6,6 +6,8 @@ service ServiceData{
     rpc serviceStatus (EmptyRequest) returns (StatusServer);
     rpc usuariolist (EmptyRequest) returns (UsuariosList);
     rpc usuarioByEmail (UsuarioByEmailRequest) returns (Usuario);
+
+    rpc usuarioListStream (EmptyRequest) returns (stream Usuario);
 }
 
 message EmptyRequest {}
