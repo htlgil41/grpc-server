@@ -1,14 +1,18 @@
+import type { RequestVoid } from './types/requests.ts';
+import type { ServerStatusResponse } from './types/responses.ts';
+
 import 'dotenv/config';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as grpc from '@grpc/grpc-js';
 import * as protoloader from  '@grpc/proto-loader';
 import { LoadEnvOrThrow } from './helpers/loadenv.ts';
+import { serviceStatus } from './funcs/serviceStatus.ts';
 
 const PATH = dirname(fileURLToPath(import.meta.url));
 const PROTO_PATH = path.resolve(PATH, '../proto.proto');
 interface ServicesGrpc {
-    serviceStatus: grpc.MethodDefinition<any, any>
+    serviceStatus: grpc.MethodDefinition<RequestVoid, ServerStatusResponse>
 }
 
 const protoLoad = protoloader.loadSync(PROTO_PATH);
@@ -18,17 +22,21 @@ const services = grpc.loadPackageDefinition(protoLoad) as {
     }
 };
 
-function serviceStatus(
-    call: grpc.ServerUnaryCall<any, any>,
-    callback: grpc.sendUnaryData<any>
-) {
-
-    callback(null, "");
-}
-
 function main () {
 
-    const server = new grpc.Server();
+    const server = new grpc.Server({
+        "grpc.max_receive_message_length": (1024 * 1024) * 1,
+        "grpc.max_send_message_length": (1024 * 1024) * 1,
+
+        "grpc.max_connection_age_ms": 60000 * 8,
+        "grpc.max_connection_idle_ms": 60000 * 4,
+        "grpc.max_connection_age_grace_ms": 60000,
+
+        "grpc.keepalive_time_ms": 20000,
+        "grpc.keepalive_timeout_ms": 8000,
+        "grpc.http2.min_time_between_pings_ms": 15000,
+        "grpc.keepalive_permit_without_calls": 1,
+    });
     server.addService(services.ServiceData.ServiceData.service, {serviceStatus});
     server.bindAsync(`0.0.0.0:${LoadEnvOrThrow('PORT_GRPC')}`, grpc.ServerCredentials.createInsecure(), () =>{
 
